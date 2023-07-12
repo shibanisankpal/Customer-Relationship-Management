@@ -119,9 +119,9 @@ def main():
     customers = get_customers()
     page_size = 10
     num_pages = (len(customers) - 1) // page_size + 1
-    page_num = st.number_input("Enter page number", min_value=1, max_value=num_pages, value=1, key="page_num")
+    page_num = st.number_input("Enter page number", min_value=1, max_value=num_pages, value=1, step=1, key="page_num")
     start_index = (page_num - 1) * page_size
-    end_index = start_index + page_size
+    end_index = min(start_index + page_size, len(customers))
     displayed_customers = customers[start_index:end_index]
     if displayed_customers:
         st.write("Customers:")
@@ -129,7 +129,6 @@ def main():
             st.write(f"ID: {customer[0]}, Name: {customer[1]}, Email: {customer[2]}, Phone: {customer[3]}")
     else:
         st.write("No customers to display.")
-
     # Export Customer Data
     st.header("Export Customer Data")
     export_format = st.selectbox("Select export format", ["CSV", "Excel"], key="export_format")
