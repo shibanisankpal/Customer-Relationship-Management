@@ -1,6 +1,7 @@
 import streamlit as st
 import sqlite3
 import pandas as pd
+import plotly.express as px
 
 # Connect to the database
 conn = sqlite3.connect('crm.db')
@@ -143,12 +144,12 @@ def main():
     # Data Visualization: Customer Analysis
     st.header("Customer Analysis")
 
-    # Bar Chart: Customer Count by Email Domain
+    # Bar Chart: Customer Count by Name
     st.subheader("Customer Count by Email Domain")
     customers = get_customers()
     df_customers = pd.DataFrame(customers, columns=["ID", "Name", "Email", "Phone"])
-    email_domains = df_customers["Email"].str.split("@", expand=True)[1].value_counts()
-    fig_bar = px.bar(email_domains, x=email_domains.index, y=email_domains.values)
+    name = df_customers["Name"].value_counts()
+    fig_bar = px.bar(name, x=name.index, y=name.values)
     st.plotly_chart(fig_bar)
 
     # Pie Chart: Customer Count by Phone Type
