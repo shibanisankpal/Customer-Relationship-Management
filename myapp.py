@@ -52,7 +52,7 @@ def sort_customers(attribute, ascending=True):
 
 # Streamlit UI
 def main():
-    st.title("CRM System")
+    st.title("Customer Relationship Management System")
 
     # Add Customer
     st.header("Add Customer")
