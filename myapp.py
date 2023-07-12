@@ -20,7 +20,7 @@ def add_customer(name, email, phone):
 
 # Remove a customer from the database
 def remove_customer(customer_id):
-    c.execute("DELETE FROM customers WHERE id=?", customer_id)
+    c.execute("DELETE FROM customers WHERE id=?", (customer_id))
     conn.commit()
 
 # Get all customers from the database
@@ -40,6 +40,13 @@ def main():
     if st.button("Add"):
         add_customer(name, email, phone)
         st.success("Customer added successfully.")
+        
+    # Remove Customer
+    st.header("Remove Customer")
+    remove_id = st.number_input("Enter the ID of the customer to remove")
+    if st.button("Remove"):
+        remove_customer(remove_id)
+        st.success("Customer removed successfully.")
 
     # Display Customers
     st.header("Customer List")
