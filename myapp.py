@@ -20,7 +20,7 @@ def add_customer(name, email, phone):
 
 # Remove a customer from the database
 def remove_customer(customer_id):
-    c.execute("DELETE FROM customers WHERE id=?", (customer_id))
+    c.execute("DELETE FROM customers WHERE id=?", (customer_id,))
     conn.commit()
 
 # Get all customers from the database
