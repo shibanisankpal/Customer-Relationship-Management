@@ -42,8 +42,8 @@ def search_customers(query):
 
 # Filter customers based on specific criteria
 def filter_customers(criteria):
-    # Implement your filtering logic here
-    pass
+    c.execute(f"SELECT * FROM customers WHERE {criteria}")
+    return c.fetchall()
 
 # Sort customers by attribute
 def sort_customers(attribute, ascending=True):
@@ -56,33 +56,33 @@ def main():
 
     # Add Customer
     st.header("Add Customer")
-    name = st.text_input("Name")
-    email = st.text_input("Email")
-    phone = st.text_input("Phone")
+    add_name = st.text_input("Name", key="add_name")
+    add_email = st.text_input("Email", key="add_email")
+    add_phone = st.text_input("Phone", key="add_phone")
     if st.button("Add"):
-        add_customer(name, email, phone)
+        add_customer(add_name, add_email, add_phone)
         st.success("Customer added successfully.")
 
     # Update Customer
     st.header("Update Customer Details")
-    update_id = st.number_input("Enter the ID of the customer to update")
-    update_name = st.text_input("Name")
-    update_email = st.text_input("Email")
-    update_phone = st.text_input("Phone")
+    update_id = st.number_input("Enter the ID of the customer to update", step=1, key="update_id")
+    update_name = st.text_input("Name", key="update_name")
+    update_email = st.text_input("Email", key="update_email")
+    update_phone = st.text_input("Phone", key="update_phone")
     if st.button("Update"):
         update_customer(update_id, update_name, update_email, update_phone)
         st.success("Customer details updated successfully.")
 
     # Remove Customer
     st.header("Remove Customer")
-    remove_id = st.number_input("Enter the ID of the customer to remove")
+    remove_id = st.number_input("Enter the ID of the customer to remove", step=1, key="remove_id")
     if st.button("Remove"):
         remove_customer(remove_id)
         st.success("Customer removed successfully.")
 
     # Search Customers
     st.header("Search Customers")
-    search_query = st.text_input("Enter a name, email, or phone number to search")
+    search_query = st.text_input("Enter a name, email, or phone number to search", key="search_query")
     if st.button("Search"):
         searched_customers = search_customers(search_query)
         if searched_customers:
@@ -94,12 +94,20 @@ def main():
 
     # Filter Customers
     st.header("Filter Customers")
-    # Implement your filtering UI and logic here
+    filter_criteria = st.text_input("Enter a filter criteria (e.g., name = 'John')", key="filter_criteria")
+    if st.button("Filter"):
+        filtered_customers = filter_customers(filter_criteria)
+        if filtered_customers:
+            st.write("Filtered Customers:")
+            for customer in filtered_customers:
+                st.write(f"ID: {customer[0]}, Name: {customer[1]}, Email: {customer[2]}, Phone: {customer[3]}")
+        else:
+            st.write("No customers matching the filter criteria.")
 
     # Sort Customers
     st.header("Sort Customers")
-    sort_attribute = st.selectbox("Select an attribute to sort by", ["name", "email", "phone"])
-    sort_ascending = st.checkbox("Sort in ascending order", value=True)
+    sort_attribute = st.selectbox("Select an attribute to sort by", ["name", "email", "phone"], key="sort_attribute")
+    sort_ascending = st.checkbox("Sort in ascending order", value=True, key="sort_ascending")
     if st.button("Sort"):
         sorted_customers = sort_customers(sort_attribute, sort_ascending)
         st.write("Sorted Customers:")
@@ -111,15 +119,20 @@ def main():
     customers = get_customers()
     page_size = 10
     num_pages = (len(customers) - 1) // page_size + 1
-    page_num = st.number_input("Enter page number", min_value=1, max_value=num_pages, value=1)
+    page_num = st.number_input("Enter page number", min_value=1, max_value=num_pages, value=1, key="page_num")
     start_index = (page_num - 1) * page_size
     end_index = start_index + page_size
-    for customer in customers[start_index:end_index]:
-        st.write(f"ID: {customer[0]}, Name: {customer[1]}, Email: {customer[2]}, Phone: {customer[3]}")
+    displayed_customers = customers[start_index:end_index]
+    if displayed_customers:
+        st.write("Customers:")
+        for customer in displayed_customers:
+            st.write(f"ID: {customer[0]}, Name: {customer[1]}, Email: {customer[2]}, Phone: {customer[3]}")
+    else:
+        st.write("No customers to display.")
 
     # Export Customer Data
     st.header("Export Customer Data")
-    export_format = st.selectbox("Select export format", ["CSV", "Excel"])
+    export_format = st.selectbox("Select export format", ["CSV", "Excel"], key="export_format")
     if st.button("Export"):
         df = pd.DataFrame(customers, columns=["ID", "Name", "Email", "Phone"])
         if export_format == "CSV":
