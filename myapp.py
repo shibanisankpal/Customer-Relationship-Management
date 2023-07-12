@@ -157,14 +157,14 @@ def main():
     customers = get_customers()
     df_customers = pd.DataFrame(customers, columns=["ID", "Name", "Email", "Phone"])
     email = df_customers["Email"].value_counts()
-    fig_bar = px.bar(name, x=email.index, y=email.values)
+    fig_bar = px.bar(email, x=email.index, y=email.values)
     st.plotly_chart(fig_bar)
     # Bar Chart: Customer Count by Phone
     st.subheader("Customer Count by Phone")
     customers = get_customers()
     df_customers = pd.DataFrame(customers, columns=["ID", "Name", "Email", "Phone"])
     phone = df_customers["Phone"].value_counts()
-    fig_bar = px.bar(name, x=phone.index, y=phone.values)
+    fig_bar = px.bar(phone, x=phone.index, y=phone.values)
     st.plotly_chart(fig_bar)
 
 
