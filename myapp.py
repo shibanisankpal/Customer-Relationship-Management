@@ -43,7 +43,7 @@ def main():
         
     # Remove Customer
     st.header("Remove Customer")
-    remove_id = int(st.number_input("Enter the ID of the customer to remove"))
+    remove_id = int(st.number_input("Enter the ID of the customer to remove" , step=1))
     if st.button("Remove"):
         remove_customer(remove_id)
         st.success("Customer removed successfully.")
