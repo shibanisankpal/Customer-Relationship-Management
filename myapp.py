@@ -129,6 +129,7 @@ def main():
             st.write(f"ID: {customer[0]}, Name: {customer[1]}, Email: {customer[2]}, Phone: {customer[3]}")
     else:
         st.write("No customers to display.")
+
     # Export Customer Data
     st.header("Export Customer Data")
     export_format = st.selectbox("Select export format", ["CSV", "Excel"], key="export_format")
@@ -139,6 +140,22 @@ def main():
         elif export_format == "Excel":
             st.download_button("Download Excel", df.to_excel(index=False), file_name="customer_data.xlsx",
                                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    # Data Visualization: Customer Analysis
+    st.header("Customer Analysis")
+
+    # Bar Chart: Customer Count by Email Domain
+    st.subheader("Customer Count by Email Domain")
+    customers = get_customers()
+    df_customers = pd.DataFrame(customers, columns=["ID", "Name", "Email", "Phone"])
+    email_domains = df_customers["Email"].str.split("@", expand=True)[1].value_counts()
+    fig_bar = px.bar(email_domains, x=email_domains.index, y=email_domains.values)
+    st.plotly_chart(fig_bar)
+
+    # Pie Chart: Customer Count by Phone Type
+    st.subheader("Customer Count by Phone Type")
+    phone_types = df_customers["Phone"].str.split(" ", expand=True)[0].value_counts()
+    fig_pie = px.pie(phone_types, names=phone_types.index, values=phone_types.values)
+    st.plotly_chart(fig_pie)
 
 if __name__ == '__main__':
     main()
