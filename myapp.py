@@ -18,6 +18,11 @@ def add_customer(name, email, phone):
     c.execute("INSERT INTO customers (name, email, phone) VALUES (?, ?, ?)", (name, email, phone))
     conn.commit()
 
+# Remove a customer from the database
+def remove_customer(customer_id):
+    c.execute("DELETE FROM customers WHERE id=?", customer_id)
+    conn.commit()
+
 # Get all customers from the database
 def get_customers():
     c.execute("SELECT * FROM customers")
