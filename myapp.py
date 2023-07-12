@@ -145,18 +145,28 @@ def main():
     st.header("Customer Analysis")
 
     # Bar Chart: Customer Count by Name
-    st.subheader("Customer Count by Email Domain")
+    st.subheader("Customer Count by Name")
     customers = get_customers()
     df_customers = pd.DataFrame(customers, columns=["ID", "Name", "Email", "Phone"])
     name = df_customers["Name"].value_counts()
     fig_bar = px.bar(name, x=name.index, y=name.values)
     st.plotly_chart(fig_bar)
 
-    # Pie Chart: Customer Count by Phone Type
-    st.subheader("Customer Count by Phone Type")
-    phone_types = df_customers["Phone"].str.split(" ", expand=True)[0].value_counts()
-    fig_pie = px.pie(phone_types, names=phone_types.index, values=phone_types.values)
-    st.plotly_chart(fig_pie)
+    # Bar Chart: Customer Count by Email
+    st.subheader("Customer Count by Email")
+    customers = get_customers()
+    df_customers = pd.DataFrame(customers, columns=["ID", "Name", "Email", "Phone"])
+    email = df_customers["Email"].value_counts()
+    fig_bar = px.bar(name, x=email.index, y=email.values)
+    st.plotly_chart(fig_bar)
+    # Bar Chart: Customer Count by Phone
+    st.subheader("Customer Count by Phone")
+    customers = get_customers()
+    df_customers = pd.DataFrame(customers, columns=["ID", "Name", "Email", "Phone"])
+    phone = df_customers["Phone"].value_counts()
+    fig_bar = px.bar(name, x=phone.index, y=phone.values)
+    st.plotly_chart(fig_bar)
+
 
 if __name__ == '__main__':
     main()
