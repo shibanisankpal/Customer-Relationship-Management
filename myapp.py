@@ -19,6 +19,9 @@ conn.commit()
 def add_customer(name, email, phone):
     c.execute("INSERT INTO customers (name, email, phone) VALUES (?, ?, ?)", (name, email, phone))
     conn.commit()
+    customer_id = c.lastrowid
+    c.execute("SELECT * FROM customers WHERE id=?", (customer_id,))
+    return c.fetchone()
 
 # Update customer details in the database
 def update_customer(customer_id, name, email, phone):
@@ -61,24 +64,13 @@ def main():
     add_email = st.text_input("Email", key="add_email")
     add_phone = st.text_input("Phone", key="add_phone")
     if st.button("Add"):
-        add_customer(add_name, add_email, add_phone)
-        st.success("Customer added successfully.")
-
-    # Display Customers with Pagination
-    st.header("Customer List")
-    customers = get_customers()
-    page_size = 10
-    num_pages = (len(customers) - 1) // page_size + 1
-    page_num = st.number_input("Enter page number", min_value=1, max_value=num_pages, value=1, step=1, key="page_num")
-    start_index = (page_num - 1) * page_size
-    end_index = min(start_index + page_size, len(customers))
-    displayed_customers = customers[start_index:end_index]
-    if displayed_customers:
-        st.write("Customers:")
-        for customer in displayed_customers:
-            st.write(f"ID: {customer[0]}, Name: {customer[1]}, Email: {customer[2]}, Phone: {customer[3]}")
-    else:
-        st.write("No customers to display.")
+        added_customer = add_customer(add_name, add_email, add_phone)
+        if added_customer is not None:
+            st.success("Customer added successfully.")
+            st.write("Added Customer Details:")
+            st.write(f"ID: {added_customer[0]}, Name: {added_customer[1]}, Email: {added_customer[2]}, Phone: {added_customer[3]}")
+        else:
+            st.error("Failed to add customer.")
 
     # Update Customer
     st.header("Update Customer Details")
@@ -131,6 +123,21 @@ def main():
         for customer in sorted_customers:
             st.write(f"ID: {customer[0]}, Name: {customer[1]}, Email: {customer[2]}, Phone: {customer[3]}")
 
+    # Display Customers with Pagination
+    st.header("Customer List")
+    customers = get_customers()
+    page_size = 10
+    num_pages = (len(customers) - 1) // page_size + 1
+    page_num = st.number_input("Enter page number", min_value=1, max_value=num_pages, value=1, step=1, key="page_num")
+    start_index = (page_num - 1) * page_size
+    end_index = min(start_index + page_size, len(customers))
+    displayed_customers = customers[start_index:end_index]
+    if displayed_customers:
+        st.write("Customers:")
+        for customer in displayed_customers:
+            st.write(f"ID: {customer[0]}, Name: {customer[1]}, Email: {customer[2]}, Phone: {customer[3]}")
+    else:
+        st.write("No customers to display.")
 
     # Export Customer Data
     st.header("Export Customer Data")
