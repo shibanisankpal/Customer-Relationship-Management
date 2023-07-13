@@ -64,6 +64,22 @@ def main():
         add_customer(add_name, add_email, add_phone)
         st.success("Customer added successfully.")
 
+    # Display Customers with Pagination
+    st.header("Customer List")
+    customers = get_customers()
+    page_size = 10
+    num_pages = (len(customers) - 1) // page_size + 1
+    page_num = st.number_input("Enter page number", min_value=1, max_value=num_pages, value=1, step=1, key="page_num")
+    start_index = (page_num - 1) * page_size
+    end_index = min(start_index + page_size, len(customers))
+    displayed_customers = customers[start_index:end_index]
+    if displayed_customers:
+        st.write("Customers:")
+        for customer in displayed_customers:
+            st.write(f"ID: {customer[0]}, Name: {customer[1]}, Email: {customer[2]}, Phone: {customer[3]}")
+    else:
+        st.write("No customers to display.")
+
     # Update Customer
     st.header("Update Customer Details")
     update_id = st.number_input("Enter the ID of the customer to update", step=1, key="update_id")
@@ -115,21 +131,6 @@ def main():
         for customer in sorted_customers:
             st.write(f"ID: {customer[0]}, Name: {customer[1]}, Email: {customer[2]}, Phone: {customer[3]}")
 
-    # Display Customers with Pagination
-    st.header("Customer List")
-    customers = get_customers()
-    page_size = 10
-    num_pages = (len(customers) - 1) // page_size + 1
-    page_num = st.number_input("Enter page number", min_value=1, max_value=num_pages, value=1, step=1, key="page_num")
-    start_index = (page_num - 1) * page_size
-    end_index = min(start_index + page_size, len(customers))
-    displayed_customers = customers[start_index:end_index]
-    if displayed_customers:
-        st.write("Customers:")
-        for customer in displayed_customers:
-            st.write(f"ID: {customer[0]}, Name: {customer[1]}, Email: {customer[2]}, Phone: {customer[3]}")
-    else:
-        st.write("No customers to display.")
 
     # Export Customer Data
     st.header("Export Customer Data")
