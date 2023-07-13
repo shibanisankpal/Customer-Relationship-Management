@@ -3,7 +3,10 @@
 A Customer Relationship Management (CRM) system built using Streamlit and SQLite.
 
 ## Overview
-The CRM System is a web application that allows businesses to manage their customer interactions effectively. It provides functionalities such as adding new customers. The application is built with Python using the Streamlit framework for the user interface and SQLite for the database.
+Developed a robust customer relationship management (CRM) system. This enables efficient management of customer data through features such as adding, updating, and removing customers. It also provides advanced functionalities like search, filtering, sorting, and pagination, allowing users to easily access and analyse customer information. The application is built with Python using the Streamlit framework for the user interface and SQLite for the database.
+
+
+
 
 ## Application Link
 
